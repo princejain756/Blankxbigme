@@ -15,7 +15,7 @@ export const FREE_SHIPPING_THRESHOLD = 500;
 export const CHOCOLATE_LABEL = {
   name: 'BLANK Chocolate',
   mrp: 100,
-  unitLabel: '5 pieces',
+  unitLabel: '4 bars',
   ingredients: [
     'Brown sugar',
     'Cocoa solids',
@@ -29,7 +29,7 @@ export const CHOCOLATE_LABEL = {
 export const CHOCOLATE_GALLERY_IMAGES = [
   { src: '/product-images/blank-ts-main.png', alt: 'Blank@TS chocolate arranged on a wooden plate', label: 'Hero View' },
   { src: '/product-images/eyeleve.webp', alt: 'Blank@TS chocolate stacked on a tray', label: 'Display Stack' },
-  { src: '/product-images/topview.webp', alt: 'Top view of five Blank@TS chocolate pieces', label: 'Top View' },
+  { src: '/product-images/topview.webp', alt: 'Top view of four Blank@TS chocolate bars', label: 'Top View' },
   { src: '/product-images/Brokenbite.webp', alt: 'Broken Blank@TS chocolate showing the interior texture', label: 'Broken Bite' },
   { src: '/product-images/MacroCloseup.webp', alt: 'Macro close-up of wrapped Blank@TS chocolate pieces', label: 'Macro Close-Up' },
   { src: '/product-images/blankbar.webp', alt: 'Blank@TS chocolate bar view', label: 'Bar View' },
@@ -112,7 +112,7 @@ export const PRODUCTS: Product[] = [
     category: 'chocolate',
     image: '/product-images/blank-ts-main.png',
     description: 'Signature chocolate pack crafted for a rich, smooth bite.',
-    meta: '5 pieces',
+    meta: '4 bars',
     note: 'Brown sugar, cocoa solids, skimmed milk powder, stevia, erythritol, monk fruit',
   },
   {

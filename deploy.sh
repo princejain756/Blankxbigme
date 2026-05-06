@@ -28,4 +28,7 @@ chmod -R 755 "$TARGET_DIR"
 echo "Reloading nginx..."
 systemctl reload nginx
 
+echo "Restarting blank-api service..."
+systemctl restart blank-api
+
 echo "Deployment complete: https://blank.cool"

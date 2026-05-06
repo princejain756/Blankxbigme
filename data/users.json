@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": "6148ef19-2c3e-4551-b62f-2c6faf2709bb",
+      "name": "Prod User",
+      "email": "produser@example.com",
+      "phone": "9999999999",
+      "passwordHash": "7c904125ca29c72e06a8d0442863a386aae76ff59a56bb068f20377dfcb4df77a23f9ee37949b58901d6e800ff93f7356e1e2f056a2e84c3b08ff7db0d1444bb",
+      "passwordSalt": "27316b2f6402e3f48ffff306654e3cf9",
+      "createdAt": "2026-03-26T03:56:00.493Z"
+    }
+  ]
+}

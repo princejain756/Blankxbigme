@@ -1,0 +1,34 @@
+{
+  "orders": [
+    {
+      "id": "BLK-MN6XYHP0-9ED5",
+      "createdAt": "2026-03-26T03:57:17.460Z",
+      "updatedAt": "2026-03-26T03:57:17.460Z",
+      "status": "pending",
+      "customer": {
+        "name": "Prince Jain",
+        "email": "princejain756@gmail.com",
+        "phone": "08005634678",
+        "address": "G-19, 20 Shubhash Nagar shopping center"
+      },
+      "items": [
+        {
+          "id": "bigme-s6-color-lite-7-8inch-kaleido-plus-e-notepad",
+          "name": "Bigme S6 color +Lite-7.8inch Kaleido 3 E-notepad",
+          "price": 40844,
+          "quantity": 1,
+          "image": "https://cdn.shopify.com/s/files/1/0629/1311/8387/products/bigme-s6-color-lite-78inch-kaleido-plus-e-notepad-922190.jpg?v=1700597685"
+        }
+      ],
+      "totals": {
+        "subtotal": 40844,
+        "shipping": 0,
+        "total": 40844,
+        "currency": "INR"
+      },
+      "payment": {
+        "method": "cod"
+      }
+    }
+  ]
+}

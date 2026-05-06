@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Block admin panels
+Disallow: /#admin
+Disallow: /#checkout
+Disallow: /#track
+
+Sitemap: https://blank.cool/sitemap.xml

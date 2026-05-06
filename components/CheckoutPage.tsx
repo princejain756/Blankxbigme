@@ -474,6 +474,9 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({ items, onBack, onOrderPlace
                             alt={item.product.name}
                             className="h-full w-full object-contain p-1"
                             loading="lazy"
+                            decoding="async"
+                            width={72}
+                            height={72}
                           />
                         ) : (
                           <ShoppingBagFallback />

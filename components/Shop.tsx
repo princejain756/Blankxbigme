@@ -101,7 +101,7 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
   const signatureChocolate = PRODUCTS.find((product) => product.id === 'blank-ts-signature') ?? PRODUCTS[0];
 
   return (
-    <div className="relative mx-auto min-h-screen max-w-7xl overflow-hidden px-4 pb-12 pt-24 sm:px-6 md:pb-24 md:pt-32">
+    <div className="relative mx-auto min-h-screen max-w-7xl overflow-hidden px-4 pb-44 pt-24 sm:px-6 md:pb-24 md:pt-32">
       <div className="fixed inset-0 -z-10 pointer-events-none">
         <div className="absolute -right-28 top-8 h-72 w-72 rounded-full bg-cocoa-200/30 blur-[90px] dark:bg-cocoa-900/20" />
         <div className="absolute -left-24 bottom-20 h-80 w-80 rounded-full bg-amber-100/40 blur-[100px] dark:bg-amber-900/10" />
@@ -151,13 +151,14 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
         </div>
       </section>
 
-      <div className="sticky top-20 z-30 -mx-4 mt-4 border-y border-cocoa-100 bg-cream/90 px-4 py-3 backdrop-blur-xl dark:border-cocoa-800 dark:bg-cocoa-950/90 md:static md:mx-0 md:mt-8 md:border-0 md:bg-transparent md:px-0 md:py-0 md:backdrop-blur-0">
+      <div className="mt-8 hidden md:block">
         <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-4 md:overflow-visible md:pb-0">
           {collections.map((collection) => {
             const isActive = activeCollection.id === collection.id;
             return (
               <button
                 key={collection.id}
+                aria-pressed={isActive}
                 onClick={() => setActiveCollectionId(collection.id)}
                 className={`flex min-w-[9.5rem] items-center gap-3 rounded-2xl border px-4 py-3 text-left transition-all duration-300 md:min-w-0 ${
                   isActive
@@ -180,7 +181,7 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
         </div>
       </div>
 
-      <motion.div layout className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:mt-10 md:gap-6">
+      <motion.div layout className="mt-6 grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:mt-10 md:gap-6">
         <AnimatePresence mode="popLayout">
           {filteredProducts.map((product, index) => (
             <motion.article
@@ -190,37 +191,41 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 16 }}
               transition={{ duration: 0.35, delay: index * 0.035 }}
-              className="group grid grid-cols-[7.5rem,1fr] overflow-hidden rounded-[1.75rem] border border-cocoa-100 bg-white shadow-[0_16px_50px_-35px_rgba(43,33,27,0.45)] dark:border-cocoa-800 dark:bg-cocoa-900/80 sm:block md:rounded-[2.25rem]"
+              className="group grid h-full min-h-44 grid-cols-[6.75rem,minmax(0,1fr)] overflow-hidden rounded-[1.5rem] border border-cocoa-100 bg-white shadow-[0_16px_50px_-35px_rgba(43,33,27,0.45)] dark:border-cocoa-800 dark:bg-cocoa-900/80 sm:min-h-[32rem] sm:grid-cols-1 sm:grid-rows-[15.5rem,minmax(0,1fr)] md:grid-rows-[17rem,minmax(0,1fr)] md:rounded-[2.25rem]"
             >
-              <div className="relative flex min-h-40 items-center justify-center bg-gradient-to-br from-cocoa-50 to-white p-3 dark:from-cocoa-950 dark:to-cocoa-900 sm:aspect-[1.08/1] sm:min-h-0 sm:p-5">
+              <div className="relative flex min-h-full items-center justify-center bg-gradient-to-br from-cocoa-50 to-white p-3 dark:from-cocoa-950 dark:to-cocoa-900 sm:min-h-0 sm:p-5">
                 <img
                   src={product.image}
                   alt={product.name}
                   loading="lazy"
-                  className="h-full max-h-48 w-full object-contain transition-transform duration-700 group-hover:scale-105"
+                  decoding="async"
+                  width={360}
+                  height={360}
+                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 120px"
+                  className="h-full max-h-40 w-full object-contain transition-transform duration-700 group-hover:scale-105 sm:max-h-full"
                 />
-                <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-widest text-cocoa-800 shadow-sm dark:bg-cocoa-900/90 dark:text-cocoa-100">
+                <span className="absolute left-2 top-2 rounded-full bg-white/90 px-2 py-1 text-[8px] font-bold uppercase tracking-widest text-cocoa-800 shadow-sm dark:bg-cocoa-900/90 dark:text-cocoa-100 sm:left-3 sm:top-3 sm:px-2.5 sm:text-[9px]">
                   {categoryLabels[product.category]}
                 </span>
               </div>
 
-              <div className="flex min-w-0 flex-col p-4 md:p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="font-serif text-xl leading-tight text-cocoa-950 dark:text-white md:text-2xl">
+              <div className="flex min-h-full min-w-0 flex-col p-3.5 sm:grid sm:h-full sm:grid-rows-[auto,auto,minmax(0,1fr),auto] sm:p-4 md:p-6">
+                <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                  <h3 className="min-w-0 font-serif text-lg leading-tight text-cocoa-950 dark:text-white sm:text-xl md:text-2xl">
                     {product.name}
                   </h3>
-                  <div className="shrink-0 rounded-xl bg-cocoa-50 px-2.5 py-1 font-serif text-base text-cocoa-950 dark:bg-cocoa-950 dark:text-white md:text-lg">
+                  <div className="w-fit shrink-0 rounded-lg bg-cocoa-50 px-2.5 py-1 font-serif text-sm text-cocoa-950 dark:bg-cocoa-950 dark:text-white sm:rounded-xl sm:text-base md:text-lg">
                     {formatPrice(product.price)}
                   </div>
                 </div>
 
                 {product.description && (
-                  <p className="mt-3 line-clamp-3 text-xs leading-relaxed text-cocoa-500 dark:text-cocoa-400 md:text-sm">
+                  <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-cocoa-500 dark:text-cocoa-400 sm:mt-3 sm:line-clamp-3 md:text-sm">
                     {product.description}
                   </p>
                 )}
 
-                <div className="mt-4 space-y-1.5 border-t border-cocoa-100 pt-3 text-[11px] text-cocoa-500 dark:border-cocoa-800 dark:text-cocoa-400">
+                <div className="mt-4 hidden min-h-0 space-y-1.5 border-t border-cocoa-100 pt-3 text-[11px] text-cocoa-500 dark:border-cocoa-800 dark:text-cocoa-400 sm:block">
                   {product.meta && (
                     <div className="flex items-center gap-2">
                       <Sparkles size={12} />
@@ -241,7 +246,7 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
 
                 <button
                   onClick={() => addToCart(product)}
-                  className="mt-auto flex w-full items-center justify-center rounded-2xl bg-cocoa-900 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-cocoa-900/10 transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-cocoa-950 dark:hover:bg-cocoa-100"
+                  className="mt-auto flex min-h-11 w-full shrink-0 items-center justify-center self-end rounded-xl bg-cocoa-900 px-4 py-3 text-xs font-bold uppercase tracking-wider text-white shadow-lg shadow-cocoa-900/10 transition-all hover:bg-black active:scale-95 dark:bg-white dark:text-cocoa-950 dark:hover:bg-cocoa-100 sm:mt-4 sm:rounded-2xl"
                 >
                   <Plus size={16} className="mr-2" />
                   Add
@@ -338,7 +343,16 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
                   whileHover={{ y: -8 }}
                   className={`aspect-[3/4] overflow-hidden rounded-3xl border border-white/10 shadow-2xl ${index % 2 ? 'mt-8' : ''}`}
                 >
-                  <img src={img.src} alt={img.alt} className="h-full w-full object-cover" />
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    decoding="async"
+                    width={360}
+                    height={480}
+                    sizes="(min-width: 1024px) 18vw, 25vw"
+                    className="h-full w-full object-cover"
+                  />
                 </motion.div>
               ))}
             </div>
@@ -360,6 +374,32 @@ const Shop: React.FC<ShopProps> = ({ addToCart }) => {
           Go to Builder
         </button>
       </section>
+
+      <div className="fixed inset-x-0 bottom-[4.75rem] z-40 px-3 md:hidden">
+        <div className="mx-auto max-w-md rounded-2xl border border-cocoa-200 bg-white/95 p-2 shadow-[0_-12px_40px_rgba(43,33,27,0.16)] backdrop-blur-xl dark:border-cocoa-800 dark:bg-cocoa-950/95">
+          <div className="grid grid-cols-4 gap-1.5">
+            {collections.map((collection) => {
+              const isActive = activeCollection.id === collection.id;
+              return (
+                <button
+                  key={`bottom-${collection.id}`}
+                  type="button"
+                  aria-pressed={isActive}
+                  onClick={() => setActiveCollectionId(collection.id)}
+                  className={`flex min-h-[3.35rem] flex-col items-center justify-center rounded-xl px-1.5 py-2 text-center transition-all ${
+                    isActive
+                      ? 'bg-cocoa-900 text-white shadow-lg shadow-cocoa-900/15 dark:bg-white dark:text-cocoa-950'
+                      : 'text-cocoa-500 hover:bg-cocoa-50 dark:text-cocoa-300 dark:hover:bg-cocoa-900/70'
+                  }`}
+                >
+                  <span className="mb-1 flex h-4 items-center justify-center">{collection.icon}</span>
+                  <span className="max-w-full truncate text-[10px] font-bold leading-none">{collection.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

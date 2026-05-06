@@ -126,6 +126,20 @@ const extractSpecLines = (html: string) => {
 
 const dedupeImages = (urls: string[]) => Array.from(new Set(urls.filter(Boolean)));
 
+const optimizeImageUrl = (src: string, width: number) => {
+  if (!src || src.startsWith('/')) return src;
+
+  try {
+    const url = new URL(src);
+    if (url.hostname.includes('shopify') || url.hostname.includes('bigme')) {
+      url.searchParams.set('width', String(width));
+    }
+    return url.toString();
+  } catch {
+    return src;
+  }
+};
+
 const isUsedProduct = (product: ShopifyProduct) => {
   const haystack = [
     asString(product.title),
@@ -435,9 +449,13 @@ const OverviewCard: React.FC<{
       <div className="aspect-[4/3] overflow-hidden flex items-center justify-center p-4">
         {product.images[0] ? (
           <img
-            src={product.images[0]}
+            src={optimizeImageUrl(product.images[0], 560)}
             alt={product.title}
             loading="lazy"
+            decoding="async"
+            width={560}
+            height={420}
+            sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 92vw"
             className="max-h-full max-w-full object-contain transition-transform duration-700 group-hover:scale-[1.03]"
           />
         ) : (
@@ -546,7 +564,7 @@ const ProductDetailPage: React.FC<{
         id: product.handle,
         name: product.title,
         price: inrPrice,
-        image: product.images[0] ?? '',
+        image: product.images[0] ? optimizeImageUrl(product.images[0], 480) : '',
         category: 'gadget',
         description: product.summary,
         note: product.productType,
@@ -584,8 +602,12 @@ const ProductDetailPage: React.FC<{
                   className="flex h-full min-w-0 w-full items-center justify-center"
                 >
                   <img
-                    src={selectedImage}
+                    src={optimizeImageUrl(selectedImage, 1200)}
                     alt={product.title}
+                    width={1200}
+                    height={900}
+                    fetchPriority="high"
+                    decoding="async"
                     className="block h-[460px] max-w-full flex-shrink object-contain object-center transition-transform duration-700 hover:scale-[1.02] md:h-[580px] xl:h-[640px]"
                   />
                 </button>
@@ -612,10 +634,13 @@ const ProductDetailPage: React.FC<{
                       }`}
                     >
                       <img
-                        src={image}
+                        src={optimizeImageUrl(image, 160)}
                         alt={`${product.title} thumbnail`}
                         className="h-full w-full object-cover"
                         loading="lazy"
+                        decoding="async"
+                        width={80}
+                        height={80}
                       />
                     </button>
                   );
@@ -769,10 +794,14 @@ const ProductDetailPage: React.FC<{
             >
               <div className="aspect-[4/3] overflow-hidden bg-cocoa-950 dark:bg-zinc-950">
                 <img
-                  src={image}
+                  src={optimizeImageUrl(image, 640)}
                   alt={`${product.title} gallery ${index + 1}`}
                   className="h-full w-full object-cover transition-transform duration-700 hover:scale-[1.03]"
                   loading="lazy"
+                  decoding="async"
+                  width={640}
+                  height={480}
+                  sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 92vw"
                 />
               </div>
             </button>
@@ -851,8 +880,11 @@ const ProductDetailPage: React.FC<{
                   initial={{ opacity: 0, scale: 0.98 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
-                  src={selectedImage}
+                  src={optimizeImageUrl(selectedImage, 1400)}
+                  width={1400}
+                  height={1050}
                   alt={product.title}
+                  decoding="async"
                   className="max-h-[58vh] w-full rounded-[1.5rem] bg-white object-contain p-2 shadow-2xl md:max-h-[calc(100vh-220px)] md:max-w-[94vw] md:rounded-[2rem] md:p-4"
                 />
 
@@ -880,7 +912,15 @@ const ProductDetailPage: React.FC<{
                           image === selectedImage ? 'border-orange-400 ring-2 ring-orange-400/40' : 'border-white/20'
                         }`}
                       >
-                        <img src={image} alt={`${product.title} preview`} className="h-full w-full object-cover" />
+                        <img
+                          src={optimizeImageUrl(image, 120)}
+                          alt={`${product.title} preview`}
+                          loading="lazy"
+                          decoding="async"
+                          width={64}
+                          height={64}
+                          className="h-full w-full object-cover"
+                        />
                       </button>
                     ))}
                   </div>
@@ -1029,8 +1069,12 @@ const BigmeCollaboration: React.FC<BigmeCollaborationProps> = ({
                 <div className="border-b border-cocoa-200 bg-cocoa-950 dark:border-zinc-800 lg:border-b-0 lg:border-r">
                   {featuredProducts[0]?.images[0] ? (
                     <img
-                      src={featuredProducts[0].images[0]}
+                      src={optimizeImageUrl(featuredProducts[0].images[0], 900)}
                       alt={featuredProducts[0].title}
+                      width={900}
+                      height={900}
+                      fetchPriority="high"
+                      decoding="async"
                       className="h-full w-full object-contain bg-white p-10 dark:bg-zinc-950"
                     />
                   ) : (

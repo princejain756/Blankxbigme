@@ -13,8 +13,8 @@ import CheckoutPage from './components/CheckoutPage';
 import OrderTrackingPage from './components/OrderTrackingPage';
 import AdminPanelPage from './components/AdminPanelPage';
 import { CHOCOLATE_LABEL, SITE_DETAILS } from './constants';
-import fssaiLogo from './fssailogo.png';
-import companyLogo from './logonobgSupercropped.png';
+import fssaiLogo from './fssailogo.webp';
+import companyLogo from './logonobgSupercropped.webp';
 
 const CART_STORAGE_KEY = 'blank_cart_v1';
 
@@ -224,6 +224,9 @@ const App: React.FC = () => {
             <img 
               src={companyLogo} 
               alt="Company Logo" 
+              width={647}
+              height={553}
+              decoding="async"
               className="h-10 md:h-12 w-auto object-contain dark:brightness-0 dark:invert" 
             />
           </div>
@@ -490,6 +493,10 @@ const App: React.FC = () => {
               <img 
                 src={companyLogo} 
                 alt="Company Logo" 
+                width={647}
+                height={553}
+                loading="lazy"
+                decoding="async"
                 className="h-8 w-auto object-contain dark:brightness-0 dark:invert" 
               />
             </div>
@@ -532,7 +539,7 @@ const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <img src={fssaiLogo} alt="FSSAI logo" className="h-12 w-auto object-contain" />
+            <img src={fssaiLogo} alt="FSSAI logo" width={638} height={316} loading="lazy" decoding="async" className="h-12 w-auto object-contain" />
             <div className="text-xs leading-relaxed">
               <div className="font-medium text-cocoa-900 dark:text-cocoa-100">FSSAI Registered</div>
               <div>{SITE_DETAILS.fssaiLicense}</div>

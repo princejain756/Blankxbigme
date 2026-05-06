@@ -25,25 +25,84 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
   '.pdf': 'application/pdf',
   '.webp': 'image/webp',
+  '.br': 'application/octet-stream',
+  '.gz': 'application/gzip',
 };
+
+const COMPRESSIBLE_EXTENSIONS = new Set(['.html', '.js', '.css', '.json', '.svg', '.xml', '.txt']);
+const LONG_CACHE_EXTENSIONS = new Set([
+  '.avif',
+  '.br',
+  '.css',
+  '.gif',
+  '.gz',
+  '.ico',
+  '.jpeg',
+  '.jpg',
+  '.js',
+  '.png',
+  '.svg',
+  '.webp',
+]);
 
 const apiMiddleware = createApiMiddleware({
   dataFilePath: path.join(rootDir, 'data', 'orders.json'),
 });
 
-const sendFile = async (res, filePath) => {
+const setCacheHeaders = (res, filePath) => {
+  const extension = path.extname(filePath).toLowerCase();
+  const normalizedPath = filePath.split(path.sep).join('/');
+
+  if (extension === '.html') {
+    res.setHeader('Cache-Control', 'no-cache');
+    return;
+  }
+
+  if (normalizedPath.includes('/assets/') || LONG_CACHE_EXTENSIONS.has(extension)) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    return;
+  }
+
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+};
+
+const getEncodedFile = (req, filePath) => {
+  const extension = path.extname(filePath).toLowerCase();
+  const acceptEncoding = String(req.headers['accept-encoding'] || '');
+
+  if (!COMPRESSIBLE_EXTENSIONS.has(extension)) return { filePath };
+
+  if (acceptEncoding.includes('br') && existsSync(`${filePath}.br`)) {
+    return { filePath: `${filePath}.br`, contentEncoding: 'br', originalExtension: extension };
+  }
+
+  if (acceptEncoding.includes('gzip') && existsSync(`${filePath}.gz`)) {
+    return { filePath: `${filePath}.gz`, contentEncoding: 'gzip', originalExtension: extension };
+  }
+
+  return { filePath };
+};
+
+const sendFile = async (req, res, requestedFilePath) => {
+  const encoded = getEncodedFile(req, requestedFilePath);
+
   try {
-    const fileStats = await stat(filePath);
+    const fileStats = await stat(encoded.filePath);
     if (!fileStats.isFile()) {
       res.statusCode = 404;
       res.end('Not found');
       return;
     }
 
-    const extension = path.extname(filePath).toLowerCase();
+    const extension = encoded.originalExtension || path.extname(encoded.filePath).toLowerCase();
     res.statusCode = 200;
     res.setHeader('Content-Type', MIME_TYPES[extension] || 'application/octet-stream');
-    createReadStream(filePath).pipe(res);
+    if (encoded.contentEncoding) {
+      res.setHeader('Content-Encoding', encoded.contentEncoding);
+      res.setHeader('Vary', 'Accept-Encoding');
+    }
+    setCacheHeaders(res, requestedFilePath);
+    createReadStream(encoded.filePath).pipe(res);
   } catch {
     res.statusCode = 404;
     res.end('Not found');
@@ -63,12 +122,17 @@ const server = http.createServer(async (req, res) => {
   const safeRelativePath = requestedPath.replace(/^\/+/, '');
   const staticPath = path.join(distDir, safeRelativePath);
 
-  if (existsSync(staticPath)) {
-    await sendFile(res, staticPath);
-    return;
+  try {
+    const fileStats = await stat(staticPath);
+    if (fileStats.isFile()) {
+      await sendFile(req, res, staticPath);
+      return;
+    }
+  } catch {
+    // Fall through to the SPA entry point.
   }
 
-  await sendFile(res, path.join(distDir, 'index.html'));
+  await sendFile(req, res, path.join(distDir, 'index.html'));
 });
 
 server.listen(PORT, HOST, () => {

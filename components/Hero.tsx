@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, MoveDown } from 'lucide-react';
-import companyLogo from '../logonobgSupercropped.png';
+import companyLogo from '../logonobgSupercropped.webp';
 
 interface HeroProps {
   onStart: () => void;
@@ -14,8 +14,12 @@ const Hero: React.FC<HeroProps> = ({ onStart, onExplore }) => {
       {/* Background with parallax/animation effect simulation */}
       <div className="absolute inset-0 z-0">
         <img 
-          src="https://images.unsplash.com/photo-1606312619070-d48b706521bf?q=80&w=2070&auto=format&fit=crop" 
-          alt="Melting Chocolate" 
+          src="/product-images/blankbar.webp"
+          alt=""
+          width={669}
+          height={1200}
+          fetchPriority="high"
+          decoding="async"
           className="w-full h-full object-cover opacity-20 dark:opacity-10 scale-110 animate-float origin-center"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cream/50 to-cream dark:via-cocoa-950/50 dark:to-cocoa-950" />
@@ -48,6 +52,10 @@ const Hero: React.FC<HeroProps> = ({ onStart, onExplore }) => {
             <img 
               src={companyLogo} 
               alt="Company Logo" 
+              width={647}
+              height={553}
+              fetchPriority="high"
+              decoding="async"
               className="h-20 md:h-24 lg:h-32 w-auto object-contain dark:brightness-0 dark:invert mx-auto" 
             />
           </div>
